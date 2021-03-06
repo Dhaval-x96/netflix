@@ -1,0 +1,1 @@
+update netflix set date_added='2020-01-01' where date_added='0000-00-00';

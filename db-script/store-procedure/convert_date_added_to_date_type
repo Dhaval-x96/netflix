@@ -1,0 +1,14 @@
+CREATE DEFINER=`root`@`localhost` PROCEDURE `convert_date_added_to_date_type`()
+BEGIN
+
+    drop temporary table if exists netflix.temp_netflix;
+    create temporary table netflix.temp_netflix as (select * from netflix.netflix);
+    truncate table netflix.netflix;
+    alter table netflix.netflix modify date_added date;
+    insert into netflix.netflix(show_Id,
+                                `type`, title, director, cast, country,
+                                date_added, release_year, rated_by, duration,tags,description ) select show_Id,
+                                                                                                       `type`, title, director, cast, country,
+                                                                                                       str_to_date(date_added,'%m/%d/%Y'),
+                                                                                                       release_year, rated_by, duration, tags,description from netflix.temp_netflix;
+END
